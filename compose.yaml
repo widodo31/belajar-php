@@ -1,0 +1,37 @@
+services:
+  web:
+    build: .
+    container_name: belajar-php-web
+    ports:
+      - "8083:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0
+    container_name: belajar-php-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: belajar_php_db
+      MYSQL_USER: belajar-php
+      MYSQL_PASSWORD: noroot
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: belajar-php-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8084:80"
+    environment:
+      PMA_HOST: db      
+    depends_on:
+      - db
+
+
+volumes:
+  mysql_data:
